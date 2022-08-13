@@ -1,53 +1,61 @@
-import { useState } from "react";
-import { Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
-const TextElementInspector = ({ element }) => {
-  const [fontFamily, setFontFamily] = useState(
-    element.current.attrs.fontFamily
-  );
-  const [fontSize, setFontSize] = useState(element.current.attrs.fontSize);
+const TextElementInspector = ({ element, textElement, rectElement }) => {
+  const [fontFamily, setFontFamily] = useState(textElement.attrs.fontFamily);
+  const [fontSize, setFontSize] = useState(textElement.attrs.fontSize);
+  const [xPos, setXPos] = useState(textElement.attrs.x);
+  const [yPos, setYPos] = useState(textElement.attrs.x);
+
+  useEffect(() => {
+    console.log(textElement.attrs.x);
+    setXPos(textElement.attrs.x);
+  }, [textElement]);
 
   const handleChangeFont = (e) => {
-    element.current.attrs.fontFamily = e.target.value;
+    textElement.attrs.fontFamily = e.target.value;
     element.current.getStage().draw();
   };
 
   const handleChangeFontSize = (e) => {
-    element.current.attrs.fontSize = e.target.value;
+    textElement.attrs.fontSize = e.target.value;
     element.current.getStage().draw();
   };
 
   return (
-    <Row>
-      <Row style={{ marginTop: "25px" }}>
+    <Row style={{ marginTop: "25px" }}>
+      <Col>
         <Form.Label>Font-Family</Form.Label>
         <Form.Select
           aria-label="Default select example"
           defaultValue={fontFamily}
           onChange={handleChangeFont}
           label="text"
+          size="sm"
         >
           <option>Open this select menu</option>
           <option value={fontFamily}>{fontFamily}</option>
           <option value="Arial">Arial</option>
           <option value="Verdana">Verdana</option>
         </Form.Select>
-      </Row>
-      <Row style={{ marginTop: "25px" }}>
+      </Col>
+      <Col>
         <Form.Label>Font-Size</Form.Label>
         <Form.Select
           aria-label="Default select example"
           defaultValue={fontSize}
           onChange={handleChangeFontSize}
           label="text"
+          size="sm"
         >
           <option>Open this select menu</option>
           <option value={fontSize}>{fontSize}</option>
           <option value="25">25</option>
           <option value="56">56</option>
         </Form.Select>
-      </Row>
+      </Col>
+      <div>{xPos}</div>
     </Row>
   );
 };

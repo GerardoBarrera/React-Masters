@@ -1,4 +1,4 @@
 import { createContext } from "react";
 
-const CurrentElementContext = createContext(["Test", () => {}]);
+const CurrentElementContext = createContext([[], () => {}]);
 export default CurrentElementContext;

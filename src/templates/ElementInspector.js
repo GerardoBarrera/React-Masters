@@ -9,19 +9,23 @@ const ElementInspector = () => {
   const [inspector, setInspector] = useState();
 
   useEffect(() => {
-    el = element[0];
-    if (el.current) {
-      if (el.current.elementType === "text") {
-        console.log(el.current);
-        setInspector(
-          <TextElementInspector
-            key={el.current._id}
-            element={el}
-          ></TextElementInspector>
-        );
-        console.log("reset");
-      }
-    }
+    console.log("asdasd");
+    console.log(element);
+    // el = element[0];
+    // if (el.current) {
+    //   if (el.current.elementType === "text") {
+    //     console.log(el.current.children[1]);
+    //     setInspector(
+    //       <TextElementInspector
+    //         key={el.current._id}
+    //         element={el}
+    //         textElement={el.current.children[1]}
+    //         rectElement={el.current.children[0]}
+    //       ></TextElementInspector>
+    //     );
+    //     console.log("reset");
+    //   }
+    // }
     // if (el.attrs) {
     //   selectedElement.current = el;
     //   selectedElement.current.attrs.fontSize = 25;

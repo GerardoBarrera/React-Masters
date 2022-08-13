@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { Layer, Rect, Stage, Text } from "react-konva";
+import { Layer, Rect, Stage, Transformer } from "react-konva";
 import ElementInspector from "./ElementInspector";
 import SVGImage from "./SVGImage";
 import TextElement from "./TextElement";
 import { Context } from "react";
 import CurrentElementContext from "./CurrentElementContext";
+import ElementBuilder from "./ElementBuilder";
 
 const CreateTemplate = () => {
   const mainStageRef = useRef();
@@ -13,8 +14,25 @@ const CreateTemplate = () => {
   const pdfAreaRef = useRef();
   const [offSetX, setOffSetX] = useState(0);
   const value = useState("Hi first state");
+  const trRef = useRef();
+  const [elements, setElements] = useState({
+    elements: [
+      {
+        id: 1,
+        shapeType: "TEXT",
+        text: "{HeaderTitle}",
+        x: 10,
+        y: 10,
+      },
+    ],
+  });
 
   const handleWheel = (e) => {
+    setElements((elements) => ({
+      elements: elements.elements.map((el) =>
+        el.id === 1 ? { ...el, x: 22, y: 23 } : el
+      ),
+    }));
     e.evt.preventDefault();
     var scaleBy = 1.11;
     var oldScale = mainStageRef.current.scaleX();
@@ -79,17 +97,32 @@ const CreateTemplate = () => {
                 offsetY={-10}
               >
                 <CurrentElementContext.Provider value={value}>
-                  <Layer backgroundColor="red">
+                  <Layer></Layer>
+                  <Layer>
                     <Rect
                       ref={pdfAreaRef}
                       fill="white"
                       width={612}
                       height={792}
+                      transformer={trRef}
                     ></Rect>
-
-                    <SVGImage></SVGImage>
-                    <TextElement></TextElement>
-                    <TextElement></TextElement>
+                    <SVGImage transformer={trRef}></SVGImage>
+                    <TextElement transformer={trRef}></TextElement>
+                    <TextElement transformer={trRef}></TextElement>
+                    {elements.elements.map((element) => (
+                      <ElementBuilder {...element} key={element.id} />
+                    ))}
+                    <Transformer
+                      ref={trRef}
+                      borderStroke="black"
+                      boundBoxFunc={(oldBox, newBox) => {
+                        // limit resize
+                        if (newBox.width < 5 || newBox.height < 5) {
+                          return oldBox;
+                        }
+                        return newBox;
+                      }}
+                    />
                   </Layer>
                 </CurrentElementContext.Provider>
               </Stage>
