@@ -6,7 +6,11 @@ import SVGImage from "./SVGImage";
 import TextElement from "./TextElement";
 import { Context } from "react";
 import CurrentElementContext from "./CurrentElementContext";
+import PdfContextProvider, { PdfContext } from "../pdf/PdfContextProvider";
+import PdfContextConsumer from "../pdf/PdfContextProvider";
 import ElementBuilder from "./ElementBuilder";
+import { initialState, pdfReducer } from "../pdf/PdfReducer";
+import ElementPanel from "./ElementPanel";
 
 const CreateTemplate = () => {
   const mainStageRef = useRef();
@@ -73,67 +77,71 @@ const CreateTemplate = () => {
     setOffSetX(-offsetXBy);
   }, []);
   return (
-    <CurrentElementContext.Provider value={value}>
-      <Row>
-        <Col
-          className="canvas-holder"
-          lg={8}
-          style={{
-            backgroundColor: "grey",
-            height: "1000px",
+    <div>
+      <PdfContextProvider initialState={initialState} reducer={pdfReducer}>
+        <Row>
+          <Col
+            className="canvas-holder"
+            lg={9}
+            style={{
+              backgroundColor: "grey",
+              height: "1000px",
 
-            overflow: "hidden",
-          }}
-        >
-          <CurrentElementContext.Consumer>
-            {(value) => (
-              <Stage
-                ref={mainStageRef}
-                width={900}
-                height={900}
-                draggable={true}
-                onWheel={handleWheel}
-                offsetX={offSetX}
-                offsetY={-10}
-              >
-                <CurrentElementContext.Provider value={value}>
-                  <Layer></Layer>
-                  <Layer>
-                    <Rect
-                      ref={pdfAreaRef}
-                      fill="white"
-                      width={612}
-                      height={792}
-                      transformer={trRef}
-                    ></Rect>
-                    <SVGImage transformer={trRef}></SVGImage>
-                    <TextElement transformer={trRef}></TextElement>
-                    <TextElement transformer={trRef}></TextElement>
-                    {elements.elements.map((element) => (
-                      <ElementBuilder {...element} key={element.id} />
-                    ))}
-                    <Transformer
-                      ref={trRef}
-                      borderStroke="black"
-                      boundBoxFunc={(oldBox, newBox) => {
-                        // limit resize
-                        if (newBox.width < 5 || newBox.height < 5) {
-                          return oldBox;
-                        }
-                        return newBox;
-                      }}
-                    />
-                  </Layer>
-                </CurrentElementContext.Provider>
-              </Stage>
-            )}
-          </CurrentElementContext.Consumer>
-        </Col>
-        <Col style={{ marginLeft: "10px" }}>
-          <ElementInspector></ElementInspector>
-        </Col>
-      </Row>
-    </CurrentElementContext.Provider>
+              overflow: "hidden",
+            }}
+          >
+            <PdfContext.Consumer>
+              {(value) => (
+                <Stage
+                  ref={mainStageRef}
+                  width={900}
+                  height={900}
+                  draggable={true}
+                  onWheel={handleWheel}
+                  offsetX={offSetX}
+                  offsetY={-10}
+                >
+                  <PdfContext.Provider value={value}>
+                    <Layer></Layer>
+                    <Layer>
+                      <Rect
+                        ref={pdfAreaRef}
+                        fill="white"
+                        width={612}
+                        height={792}
+                        transformer={trRef}
+                      ></Rect>
+                      <SVGImage transformer={trRef}></SVGImage>
+                      <TextElement
+                        text="asdasd"
+                        transformer={trRef}
+                      ></TextElement>
+                      <TextElement
+                        text="asdasd"
+                        transformer={trRef}
+                      ></TextElement>
+                      <ElementBuilder transformer={trRef} />
+                      <Transformer
+                        ref={trRef}
+                        borderStroke="black"
+                        boundBoxFunc={(oldBox, newBox) => {
+                          // limit resize
+                          if (newBox.width < 5 || newBox.height < 5) {
+                            return oldBox;
+                          }
+                          return newBox;
+                        }}
+                      />
+                    </Layer>
+                  </PdfContext.Provider>
+                </Stage>
+              )}
+            </PdfContext.Consumer>
+          </Col>
+          <ElementPanel></ElementPanel>
+        </Row>
+      </PdfContextProvider>
+    </div>
   );
 };
 

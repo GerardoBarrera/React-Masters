@@ -2,7 +2,7 @@ import { Rect, Text, Group } from "react-konva";
 import React, { useContext, useState, useRef } from "react";
 import CurrentElementContext from "./CurrentElementContext";
 
-const TextElement = ({ transformer }) => {
+const TextElement = ({ text, transformer }) => {
   const [fontFamily, setFontFamily] = useState("Georgia, serif");
   const [fontSize, setFontSize] = useState(18);
   const textRef = useRef();
@@ -16,6 +16,7 @@ const TextElement = ({ transformer }) => {
     transformer.current.nodes([textRef.current]);
     setVal(groupRef);
   };
+  console.log("re rendred tex element");
 
   const handleTransform = () => {
     const node = textRef.current;
@@ -57,9 +58,9 @@ const TextElement = ({ transformer }) => {
         dash={[1, 2, 3, 4]}
         dashEnabled={true}
         ref={textRef}
+        text={text}
         fontFamily={fontFamily}
         fontSize={fontSize}
-        text="ok"
         draggable={true}
         onClick={handleOnClick}
         onTransform={handleTransform}
