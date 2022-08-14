@@ -8,12 +8,13 @@ import {
 } from "../pdf/PdfReducer";
 import { Form } from "react-bootstrap";
 import { BsTextCenter } from "react-icons/bs";
+import uuid from "react-uuid";
 
 const ElementPanel = () => {
   const [state, dispatch] = usePdfContext();
   const { elements, selectedElement } = state;
   const textFactory = ({ elementType, text, fontSize, fontFamily, x, y }) => ({
-    id: new Date().getUTCMilliseconds().toString(),
+    id: uuid(),
     elementType,
     text,
     fontSize,
@@ -31,10 +32,10 @@ const ElementPanel = () => {
     newElement[attribute] = value;
     console.log(newElement);
     dispatch(updateElement(newElement, selectedElement));
+    console.log(elements);
   };
 
   const handleAddText = () => {
-    console.log(selectedElement);
     dispatch(
       addElement(
         textFactory({
@@ -112,7 +113,7 @@ const ElementPanel = () => {
             </Row>
           </>
         )}
-        <Row>Text Elements: {elements.length}</Row>
+        <Row>Text Elements: {Object.keys(elements).length}</Row>
       </Col>
     </>
   );

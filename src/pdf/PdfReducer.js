@@ -6,8 +6,9 @@ export const DELETE_ELEMENT = "APP/PDF/DELETE_ELEMENT";
 export const NO_ELEMENT_SELECTED = "NO_ELEMENT_SELECTED";
 
 export const initialState = {
-  elements: [],
+  elements: {},
   selectedElement: NO_ELEMENT_SELECTED,
+  stage: null,
 };
 export const deleteElement = (key) => ({
   type: DELETE_ELEMENT,
@@ -31,9 +32,10 @@ export const selectElement = (key) => ({
 
 export const pdfReducer = (state = initialState, action) => {
   if (action.type === ADD_ELEMENT) {
+    state.elements[action.element.id] = action.element;
     return {
       ...state,
-      elements: state.elements.concat(action.element),
+      elements: state.elements,
     };
   }
   if (action.type === UPDATE_ELEMENT) {
@@ -51,7 +53,7 @@ export const pdfReducer = (state = initialState, action) => {
     };
   }
   if (action.type == DELETE_ELEMENT) {
-    state.elements.splice(action.key, 1);
+    delete state.elements[action.key];
     return {
       ...state,
       elements: state.elements,

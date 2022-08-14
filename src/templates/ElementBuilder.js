@@ -14,23 +14,23 @@ const ElementBuilder = ({ transformer }) => {
     transformer.current.nodes([text]);
   };
 
-  const all = elements.map((element, key) => {
+  const all = Object.values(elements).map((element) => {
     if (element.elementType === "TEXT") {
       return (
         <Text
           {...element}
-          key={key}
+          key={element.id}
           draggable={true}
           onClick={(e) => {
             handleOnClick(e.target);
-            console.log(key);
-            dispatch(selectElement(key));
+            dispatch(selectElement(element.id));
+            console.log(e.target.getStage());
           }}
           onDragEnd={(e) => {
             var newElement = element;
             newElement.x = e.target.x();
             newElement.y = e.target.y();
-            dispatch(updateElement(newElement, key));
+            dispatch(updateElement(newElement, element.id));
           }}
         />
       );
