@@ -112,14 +112,6 @@ const CreateTemplate = () => {
                         transformer={trRef}
                       ></Rect>
                       <SVGImage transformer={trRef}></SVGImage>
-                      <TextElement
-                        text="asdasd"
-                        transformer={trRef}
-                      ></TextElement>
-                      <TextElement
-                        text="asdasd"
-                        transformer={trRef}
-                      ></TextElement>
                       <ElementBuilder transformer={trRef} />
                       <Transformer
                         ref={trRef}

@@ -1,5 +1,6 @@
-import { Row, ToggleButton, Col, FloatingLabel } from "react-bootstrap";
+import { Row, ToggleButton, Col, FloatingLabel, Badge } from "react-bootstrap";
 import { usePdfContext } from "../pdf/PdfContextProvider";
+import { Button } from "react-bootstrap";
 import {
   addElement,
   deleteElement,
@@ -7,13 +8,22 @@ import {
   updateElement,
 } from "../pdf/PdfReducer";
 import { Form } from "react-bootstrap";
-import { BsTextCenter } from "react-icons/bs";
+import { BsTextarea, BsTextareaT, BsTextCenter } from "react-icons/bs";
 import uuid from "react-uuid";
 
 const ElementPanel = () => {
   const [state, dispatch] = usePdfContext();
   const { elements, selectedElement } = state;
-  const textFactory = ({ elementType, text, fontSize, fontFamily, x, y }) => ({
+  const textFactory = ({
+    elementType,
+    text,
+    fontSize,
+    fontFamily,
+    x,
+    y,
+    width,
+    height,
+  }) => ({
     id: uuid(),
     elementType,
     text,
@@ -21,6 +31,8 @@ const ElementPanel = () => {
     fontFamily,
     x,
     y,
+    width,
+    height,
   });
 
   const handleDeleteText = () => {
@@ -59,7 +71,14 @@ const ElementPanel = () => {
             BsTextCenter: true,
           }}
         >
-          <ToggleButton onClick={handleAddText}>Add Text</ToggleButton>
+          <Row style={{ marginBottom: "20px" }}>
+            <a>
+              <Button>
+                <BsTextareaT size={40} onClick={handleAddText}></BsTextareaT>
+              </Button>
+            </a>
+          </Row>
+          <hr></hr>
         </Row>
         {selectedElement === NO_ELEMENT_SELECTED ? (
           ""
